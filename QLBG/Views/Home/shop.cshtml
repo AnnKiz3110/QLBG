@@ -12,8 +12,8 @@
             <div class="card">
                 <div class="card-body">
                     <!-- Nội dung của danh mục -->
-                    @*                    @Html.Action("DanhMucPar", "DanhMuc")
-                    *@
+                                     @Html.Action("DanhMucPar", "DanhMuc")
+                    
                 </div>
             </div>
         </div>
@@ -35,13 +35,17 @@
                 </div>
                 <div class="col-md-6 pb-4">
                     <div class="d-flex">
-                        <select class="form-control">
-                            <option>Featured</option>
-                            <option>A to Z</option>
-                            <option>Item</option>
-                        </select>
+                        <form id="sortForm" method="get">
+                            <select class="form-control" name="sortOption" onchange="document.getElementById('sortForm').submit()">
+                                <option value="Featured" @(ViewBag.SortOption == "Featured" ? "selected" : "")>Featured</option>
+                                <option value="AtoZ" @(ViewBag.SortOption == "AtoZ" ? "selected" : "")>A to Z</option>
+                                <option value="Price" @(ViewBag.SortOption == "Price" ? "selected" : "")>Price</option>
+                                <option value="PriceGreaterThan100" @(ViewBag.SortOption == "PriceGreaterThan100" ? "selected" : "")>Price > 100</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
+
             </div>
             <div class="row">
                 @foreach (var sanPham in Model)

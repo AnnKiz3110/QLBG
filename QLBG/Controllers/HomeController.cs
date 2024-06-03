@@ -32,12 +32,12 @@ namespace QLBG.Controllers
         }
         public ActionResult shopsingle()
         {
-
+            //dbminhtinh
             return View();
         }
-        public ActionResult shop(int page = 1, int pageSize = 9)
+        public ActionResult shop(int page = 1, int pageSize = 9, string sortOption = "Featured")
         {
-            var sanPhams = GetSanPhams();
+            var sanPhams = GetSanPhams(sortOption);
 
             // Tính toán số trang
             var totalProducts = sanPhams.Count();
@@ -49,18 +49,37 @@ namespace QLBG.Controllers
             // Truyền thông tin phân trang và danh sách sản phẩm đến view
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
+            ViewBag.SortOption = sortOption;
 
             return View(pagedSanPhams);
         }
-        private List<SanPham> GetSanPhams()
+
+        private List<SanPham> GetSanPhams(string sortOption)
         {
             var sanPhams = new List<SanPham>();
 
             string query = @"
-        SELECT sp.ID_SanPham, sp.TenSanPham, sp.ID_ThuongHieu, sp.ID_DanhMuc, sp.ID_Anh, sp.ID_KichThuoc, sp.ID_Mau, sp.Mota, sp.DonViGia, sp.SoLuongTon,
-               ha.AnhChinh, ha.Anh1, ha.Anh2
-        FROM SANPHAM sp
-        JOIN HINHANH ha ON sp.ID_Anh = ha.ID_Anh";
+SELECT sp.ID_SanPham, sp.TenSanPham, sp.ID_ThuongHieu, sp.ID_DanhMuc, sp.ID_Anh, sp.ID_KichThuoc, sp.ID_Mau, sp.Mota, sp.DonViGia, sp.SoLuongTon,
+       ha.AnhChinh, ha.Anh1, ha.Anh2
+FROM SANPHAM sp
+JOIN HINHANH ha ON sp.ID_Anh = ha.ID_Anh";
+
+            // Modify query based on sort option
+            switch (sortOption)
+            {
+                case "AtoZ":
+                    query += " ORDER BY sp.TenSanPham";
+                    break;
+                case "Price":
+                    query += " ORDER BY sp.DonViGia";
+                    break;
+                case "PriceGreaterThan100":
+                    query += " WHERE sp.DonViGia > 100 ORDER BY sp.DonViGia DESC";
+                    break;
+                default:
+                    // Default sorting option (Featured)
+                    break;
+            }
 
             DataTable dataTable = dbManager.ExecuteQuery(query);
 
@@ -87,6 +106,7 @@ namespace QLBG.Controllers
 
             return sanPhams;
         }
+
 
         public ActionResult ViewProfile()
         {

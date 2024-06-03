@@ -1,0 +1,18 @@
+﻿@model IEnumerable<QLBG.Models.DanhMuc>
+
+<ul class="list-group list-group-flush text-left">
+    <li class="list-group-item" style="background-color:darkorange;">
+        <a href="#" style="text-transform:uppercase; text-decoration:none; color:white; font-weight:bold;">DANH MỤC</a>
+    </li>
+    @foreach (var item in Model)
+    {
+        <li class="list-group-item" style="text-transform:uppercase; text-decoration:none;"> </li>
+
+
+        <li style="padding:5px;margin-top:10px;">
+            <a href="~/Giay/GiayTheoDM?MaDM=@item.ID_DanhMuc" style="text-decoration: none;color:black;">@item.TenDanhMuc</a>
+        </li>
+    }
+</ul>
+
+
