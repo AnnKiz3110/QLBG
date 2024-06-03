@@ -1,0 +1,48 @@
+﻿@using System.Data
+
+@{
+    ViewBag.Title = "Dữ liệu Oracle DBMS";
+    string message = ViewBag.Message as string;
+    DataTable users = ViewBag.Users as DataTable;
+}
+
+<h2>@message</h2>
+
+@if (users != null)
+{
+    <h3>Danh sách người dùng:</h3>
+    <table border="1">
+        <tr>
+            <th>Username</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (DataRow row in users.Rows)
+        {
+            <tr>
+                <td>@row["USERNAME"]</td>
+                <td>
+                    @Html.ActionLink("Thêm quyền", "ManagePrivileges", new { username = row["USERNAME"] }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Xem quyền", "ViewPrivileges", new { username = row["USERNAME"] }, new { @class = "btn btn-secondary" })
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+<br />
+
+<div>
+    @Html.ActionLink("Thêm người dùng mới", "AddUser", null, new { @class = "btn btn-primary" })
+
+    @using (Html.BeginForm("DeleteUser", "AccountOracle", FormMethod.Post, new { @class = "inline-form" }))
+    {
+        <select name="Username" class="form-control" required>
+            <option value="">Chọn người dùng để xóa</option>
+            @foreach (DataRow row in users.Rows)
+            {
+                <option value="@row["USERNAME"]">@row["USERNAME"]</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-danger">Xóa tài khoản</button>
+    }
+</div>

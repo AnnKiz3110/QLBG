@@ -1,0 +1,83 @@
+﻿@model IEnumerable<QLBG.Models.SanPham>
+
+@{
+    ViewBag.Title = "ShowListProduct";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Danh sách sản phẩm</h2>
+
+<p>
+    @Html.ActionLink("Thêm Sản Phẩm", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<div class="container mt-4">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ID_SanPham)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TenSanPham)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AnhChinh)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Mota)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DonViGia)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SoLuongTon)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ID_SanPham)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenSanPham)
+                    </td>
+                    <td>
+                        <img src="~/assets/Images/@item.AnhChinh" style="width:70px;" class="img-thumbnail" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mota)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DonViGia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SoLuongTon)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID_SanPham }, new { @class = "btn btn-warning" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID_SanPham }, new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <!-- Pagination Section -->
+            <ul class="pagination justify-content-end">
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("ShowListProduct", new { page = i })">@i</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

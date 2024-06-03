@@ -1,0 +1,43 @@
+﻿@model IEnumerable<QLBG.Models.DanhMuc>
+
+@{
+    ViewBag.Title = "ShowDanhMuc";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Danh sách danh mục</h2>
+
+<p>
+    @Html.ActionLink("Create New", "CreateDM", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ID_DanhMuc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenDanhMuc)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID_DanhMuc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenDanhMuc)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditDM", new { id = item.ID_DanhMuc }, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Delete", "DeleteDM", new { id = item.ID_DanhMuc }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

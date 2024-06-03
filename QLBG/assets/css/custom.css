@@ -1,0 +1,267 @@
+/*
+Custom Css
+*/
+.carousel-item.active {
+    background-color: #efefef; /* Thay màu này bằng màu chính của ảnh */
+}
+.navbar{
+    background-color: #ffffff;
+   
+}
+.navbar-sm-brand {
+    text-align: center;
+    color: #ffffff;
+    font-size: 20px;
+}
+.navbar .navbar-brand {
+    background-color: #ffffff; /* Thay your-color-code bằng mã màu bạn muốn sử dụng */
+}
+
+.flex-fill{
+margin-left: -10%;
+
+}
+/* Hiển thị các mục con */
+.sub-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff; /* Màu nền của mục con */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đổ */
+    z-index: 1; /* Đảm bảo mục con hiển thị trên các phần khác của trang */
+    width: 200px; /* Đặt chiều rộng của danh sách con */
+    padding: 10px;
+}
+.nav-item{
+    margin-right: -40%;
+}
+/* Hiệu ứng hover */
+.nav-item:hover .sub-menu {
+    display: block;
+    transform: scale(1.1); /* Tăng kích thước lên 110% */
+
+}
+.navbar .nav-item .sub-menu {
+    margin-top: 10px; /* Thay đổi giá trị này để điều chỉnh khoảng cách */
+}
+/* Thiết lập khoảng cách giữa các mục con */
+.sub-menu li {
+    padding: 15px;
+}
+
+/* Hiệu ứng hover cho các mục con */
+.sub-menu li:hover {
+    background-color: #f0f0f0; /* Màu nền khi di chuột qua */
+    
+}
+/* Loại bỏ dấu mục cho danh sách con của các mục cha */
+.nav-item ul, .nav-item ol {
+    list-style: none;
+}
+
+/* Thiết lập padding cho danh sách con (nếu cần) */
+.nav-item ul, .nav-item ol {
+    padding-left: 0; /* Loại bỏ khoảng cách bên trái */
+}
+/* Ban đầu, mục con có kích thước bằng 0% và bị ẩn đi */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.container{
+  max-width: 1170px;
+  margin:auto;
+}
+.row{
+  display: flex;
+  flex-wrap: wrap;
+}
+ul{
+  list-style: none;
+}
+.footer{
+  background-color: #24262b;
+    padding: 70px 0;
+}
+.footer-col{
+   width: 25%;
+   padding: 0 15px;
+}
+.footer-col h4{
+  font-size: 18px;
+  color: #ffffff;
+  text-transform: capitalize;
+  margin-bottom: 35px;
+  font-weight: 500;
+  position: relative;
+}
+.footer-col h4::before{
+  content: '';
+  position: absolute;
+  left:0;
+  bottom: -10px;
+  background-color: #e91e63;
+  height: 2px;
+  box-sizing: border-box;
+  width: 50px;
+}
+.footer-col ul li:not(:last-child){
+  margin-bottom: 10px;
+}
+.footer-col ul li a{
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 300;
+  color: #bbbbbb;
+  display: block;
+  transition: all 0.3s ease;
+}
+.footer-col ul li a:hover{
+  color: #ffffff;
+  padding-left: 8px;
+}
+.footer-col .social-links a{
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  background-color: rgba(255,255,255,0.2);
+  margin:0 10px 10px 0;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 50%;
+  color: #ffffff;
+  transition: all 0.5s ease;
+}
+.footer-col .social-links a:hover{
+  color: #24262b;
+  background-color: #ffffff;
+}
+
+/*responsive*/
+@media(max-width: 767px){
+  .footer-col{
+    width: 50%;
+    margin-bottom: 30px;
+}
+}
+@media(max-width: 574px){
+  .footer-col{
+    width: 100%;
+}
+}
+
+
+.card-img-top {
+    height: 200px; /* Đặt giá trị tùy thuộc vào yêu cầu của bạn */
+    object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng */
+}
+
+.card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    cursor:pointer;
+}
+#productCarousel {
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+}
+#productCarousel .carousel-inner {
+    text-align: center;
+}
+
+#productCarousel img {
+    max-height: 400px; /* Điều chỉnh chiều cao tối đa của ảnh */
+    margin: auto;
+}
+th {
+    white-space: nowrap; /* Prevent text wrapping */
+    text-align: center; /* Center text */
+    vertical-align: middle !important; /* Center vertically */
+}
+
+td, th {
+    text-align: center; /* Center text in cells */
+}
+
+.quantity-buttons a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 5px;
+    background-color: #f8f9fa; /* Light gray background */
+    color: #495057; /* Dark text color */
+}
+
+    .quantity-buttons a:hover {
+        background-color: #e9ecef; /* Lighter gray background on hover */
+    }
+
+/* Style for the total row */
+.total-row {
+    background-color: #f2f3f4; /* Lighter gray background for total row */
+}
+
+
+/* Trang Shop */
+.custom-card {
+    background-color: #f8f9fa; /* Màu nền */
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    
+}
+
+.custom-card h5 
+{
+        color: #007bff; /* Màu tiêu đề */
+    }
+
+
+/* Information User*/
+.gradient-custom {
+     fallback for old browsers 
+    background: #f6d365;
+     Chrome 10-25, Safari 5.1-6 
+    background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
+     W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ 
+    background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
+}
+
+
+button {
+    max-width: 320px;
+    display: flex;
+    padding: 0.5rem 1.4rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
+    align-items: center;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    gap: 0.75rem;
+    color: rgb(65, 63, 63);
+    background-color: #fff;
+    cursor: pointer;
+    transition: all .6s ease;
+}
+
+.button svg {
+    height: 24px;
+}
+
+button:hover {
+    transform: scale(1.02);
+}

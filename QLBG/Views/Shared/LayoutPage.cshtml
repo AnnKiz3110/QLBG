@@ -1,0 +1,248 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FILA SHOP</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="~/assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/OIP.jpg">
+
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/templatemo.css">
+    <link rel="stylesheet" href="~/assets/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="~/assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <link rel="stylesheet" type="text/css" href="~/assets/css/slick.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/slick-theme.css">
+    <!--
+
+    TemplateMo 559 Zay Shop
+
+    https://templatemo.com/tm-559-zay-shop
+
+    -->
+</head>
+<body>
+    <!-- Start Top Nav -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
+        <div class="container text-light">
+            <div class="w-100 d-flex justify-content-between">
+                <div>
+                    <i class="fa fa-envelope mx-2"></i>
+                    <a class="navbar-sm-brand text-light text-decoration-none" href="">Sign Up to Join FILA</a>
+                </div>
+                <div>
+                    <marquee direction="right" style="width: 400px;"> Free Standard Shipping </marquee>
+                </div>
+                <div>
+                    @if (!string.IsNullOrEmpty(Session["TaiKhoan"] as string))
+                    {
+                        <span class="navbar-sm-brand text-light text-decoration-none">
+                            Chào mừng, @(Session["TaiKhoan"] as string)! |
+                            <a href="@Url.Action("ViewProfile", "Home")" style="text-decoration:none;color:aliceblue">Thông tin cá nhân</a> |
+                            <a href="@Url.Action("Logout", "DangNhap")" style="text-decoration:none;color:aliceblue">Đăng xuất</a>
+                        </span>
+                    }
+                    else
+                    {
+                        <a class="navbar-sm-brand text-light text-decoration-none" href="@Url.Action("Login", "DangNhap")">Đăng nhập / Đăng ký</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Close Top Nav -->
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center" >
+            <a class="navbar-brand text-success logo h1 align-self-center"  href="~/Home/Index">
+                <img src="~/assets/img/Fila-Logo.jpg" width="90px" style="color: transparent;"  href="~/Home/Index">
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Home/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Home/about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Home/contact">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="~/Home/shop">Shop</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                        <div class="input-group">
+                            <input type="search" class="form-control" aria-label="Search" id="inputMobileSearch" name="txt_Search" placeholder="Search ...">
+                            <div class="input-group-text">
+                                <i class="fa fa-fw fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
+                        <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" href="~/GioHang/GioHang">
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">@ViewBag.TongSoLuong</span>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" href="@Url.Action("ViewProfile", "Home")">
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Close Header -->
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="@Url.Action("Timgiay", "Giay")" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="search" class="form-control" id="inputModalSearch" aria-label="Search" name="txt_Search" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container" >
+            <div class="row">
+                <div class="footer-col">
+                    <h4>company</h4>
+                    <ul style="margin-left: -13%;">
+                        <li><a href="#">about us</a></li>
+                        <li><a href="#">our services</a></li>
+                        <li><a href="#">privacy policy</a></li>
+                        <li><a href="#">affiliate program</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>get help</h4>
+                    <ul style="margin-left: -13%;">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">shipping</a></li>
+                        <li><a href="#">returns</a></li>
+                        <li><a href="#">order status</a></li>
+                        <li><a href="#">payment options</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>online shop</h4>
+                    <ul style="margin-left: -13%;">
+                        <li><a href="~/Giay/GiayTheoDM?MaDM=2">Male</a></li>
+                        <li><a href="~/Giay/GiayTheoDM?MaDM=3">Female</a></li>
+                        <li><a href="~/Giay/GiayTheoDM?MaDM=4">Kid</a></li>
+                        <li><a href="~/Giay/GiayTheoDM?MaDM=7">Sandals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>follow us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End of .container -->
+    <!-- End Footer -->
+    <!-- Start Script -->
+    <script src="~/assets/js/jquery-1.11.0.min.js"></script>
+    <script src="~/assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/templatemo.js"></script>
+    <script src="~/assets/js/custom.js"></script>
+    <!-- Start Slider Script -->
+    <script src="~/assets/js/slick.min.js"></script>
+    <script>
+        $('#carousel-related-product').slick({
+            infinite: true,
+            arrows: false,
+            slidesToShow: 4,
+            slidesToScroll: 3,
+            dots: true,
+            responsive: [{
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 3
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 3
+                }
+            }]
+        });
+
+        function showProductDetail(productId) {
+            // Điều hướng đến trang chi tiết sản phẩm với ID tương ứng
+            window.location.href = "@Url.Action("XemChiTietSanPham", "Giay")?mg=" + productId;
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Giá trị số lượng ban đầu
+            var quantity = parseInt($("#var-value").text());
+
+            // Giảm số lượng
+            $("#btn-minus").click(function () {
+                if (quantity > 1) {
+                    quantity--;
+                    $("#var-value").text(quantity);
+                    $("#product-quanity").val(quantity);
+                }
+            });
+
+            // Tăng số lượng
+            $("#btn-plus").click(function () {
+                quantity++;
+                $("#var-value").text(quantity);
+                $("#product-quanity").val(quantity);
+            });
+        });
+    </script>
+</body>
+</html>

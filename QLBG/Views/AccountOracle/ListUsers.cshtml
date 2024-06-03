@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "List Users";
+}
+
+<h2>List of Oracle Users</h2>
+
+@if (ViewBag.Users != null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in ViewBag.Users)
+            {
+                <tr>
+                    <td>@user</td>
+                    <td>
+                        @using (Html.BeginForm("ManagePrivileges", "AccountOracle", new { username = user }, FormMethod.Post))
+                        {
+                            <button type="submit">Manage Privileges</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<p>
+    @using (Html.BeginForm("AddUser", "AccountOracle"))
+    {
+        <button type="submit">Add New User</button>
+    }
+</p>

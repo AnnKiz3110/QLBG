@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Quản lý quyền của người dùng";
+    string username = ViewBag.Username as string;
+    List<string> privileges = ViewBag.Privileges as List<string>;
+}
+
+<h2>Quản lý quyền của người dùng @username</h2>
+
+@if (privileges != null && privileges.Any())
+{
+    <h3>Danh sách quyền:</h3>
+    <table border="1">
+        <tr>
+            <th>Privilege</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var privilege in privileges)
+        {
+            <tr>
+                <td>@privilege</td>
+                <td>
+                    @using (Html.BeginForm("DeletePrivilege", "AccountOracle", FormMethod.Post))
+                    {
+                        @Html.Hidden("Username", username)
+                        @Html.Hidden("Privilege", privilege)
+                        <button type="submit" class="btn btn-danger">Xóa quyền</button>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Không có quyền nào được gán cho người dùng này.</p>
+}
+
+<h3>Thêm quyền mới</h3>
+@using (Html.BeginForm("UpdatePrivileges", "AccountOracle", FormMethod.Post))
+{
+    @Html.Hidden("Username", username)
+    <div>
+        <label for="Privilege">Nhập quyền hoặc lệnh SQL:</label>
+        <input type="text" name="Privilege" class="form-control" placeholder="e.g., SELECT ANY TABLE" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Thêm quyền</button>
+}
+
+<h2>@ViewBag.Message</h2>

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<QLBG.Models.User>
+
+@{
+    ViewBag.Title = "ShowUser";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Danh sách tài khoản hệ thống</h2>
+
+<div class="container mt-4">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.TaiKhoan)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TaiKhoan)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "ShowDetailUser", new { id = item.ID_KhachHang }, new { @class = "btn btn-info" }) |
+                        @Html.ActionLink("Edit", "EditUser", new { id = item.ID_KhachHang }, new { @class = "btn btn-warning" }) |
+                        @using (Html.BeginForm("DeleteUser", "Admin", FormMethod.Post, new { @class = "d-inline" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", item.ID_KhachHang)
+                            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');" />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

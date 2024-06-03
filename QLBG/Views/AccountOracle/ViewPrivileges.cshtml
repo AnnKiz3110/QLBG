@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Xem quyền của người dùng";
+    string username = ViewBag.Username as string;
+    List<string> privileges = ViewBag.Privileges as List<string>;
+}
+
+<h2>Quyền của người dùng @username</h2>
+
+@if (privileges != null)
+{
+    <h3>Danh sách quyền:</h3>
+    <table border="1">
+        <tr>
+            <th>Privilege</th>
+        </tr>
+        @foreach (var privilege in privileges)
+        {
+            <tr>
+                <td>@privilege</td>
+            </tr>
+        }
+    </table>
+}
+
+<h2>@ViewBag.Message</h2>

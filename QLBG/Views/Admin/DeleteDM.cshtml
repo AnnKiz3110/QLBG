@@ -1,0 +1,34 @@
+﻿@model QLBG.Models.DanhMuc
+
+@{
+    ViewBag.Title = "DeleteDM";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+
+<h3>Bạn có muốn xóa danh mục này</h3>
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TenDanhMuc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenDanhMuc)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "ShowDanhMuc")
+        </div>
+    }
+</div>
