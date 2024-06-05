@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -304,7 +305,70 @@ namespace QLBG.Controllers
             return RedirectToAction("ShowListProduct");
         }
 
-       
+        //Show nhung khach co tong tien lon hon 500
+        public ActionResult ShowTotalPurchase()
+        {
+            OracleDbManager dbManager = new OracleDbManager();
+            DataTable result = dbManager.ShowTotalPurchase();
+
+            return View(result);
+        }
+
+        //Show nhung danh muc co tong so luong san pham ban duoc lon hon 10
+        public ActionResult ShowTotalSoldProductsByCategory()
+        {
+            OracleDbManager dbManager = new OracleDbManager();
+            DataTable result = dbManager.ShowTotalSoldProductsByCategory();
+
+            return View(result);
+        }
+
+        public ActionResult ShowDatHang(int page = 1, int pageSize = 6)
+        {
+            var listDatHang = dbManager.GetAllDatHangs();
+            var totalItems = listDatHang.Sum(dh => dh.CTDatHangs.Count);
+            var model = listDatHang.SelectMany(dh => dh.CTDatHangs.Select(ct => new CTDatHangViewModel
+            {
+                ID_DatHang = dh.ID_DatHang,
+                ID_KhachHang = dh.ID_KhachHang,
+                NgayDat = dh.NgayDat,
+                ID_CTDatHang = ct.ID_CTDatHang,
+                ID_SanPham = ct.ID_SanPham,
+                SoLuong = ct.SoLuong,
+                DonViGia = ct.DonViGia
+            }))
+            .OrderBy(s => s.ID_CTDatHang)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+            ViewBag.TotalItems = totalItems;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            return View(model);
+        }
+
+        public ActionResult XoaDonDatHang(int id)
+        {
+            var datHang = dbManager.GetDatHangById(id);
+
+            if (datHang == null)
+            {
+                return HttpNotFound();
+            }
+
+            var deleted = dbManager.DeleteDatHang(id);
+
+            if (deleted)
+            {
+                return RedirectToAction("ShowDatHang");
+            }
+
+            return HttpNotFound();
+        }
+
 
     }
 }

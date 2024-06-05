@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "GiayTheoDM";
+    Layout = "~/Views/Shared/LayoutPage.cshtml";
+}
+@model IEnumerable<QLBG.Models.SanPham>
+
+@ViewBag.TB
+<!-- Start Content -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Nội dung của danh mục -->
+                    @Html.Action("DanhMucPar", "DanhMuc")
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-inline shop-top-menu pb-3 pt-1">
+                        <li class="list-inline-item">
+                            <a class="h3 text-dark text-decoration-none mr-3" href="#">All</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="h3 text-dark text-decoration-none mr-3" href="#">Men's</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="h3 text-dark text-decoration-none" href="#">Women's</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6 pb-4">
+                    <div class="d-flex">
+                        <select class="form-control">
+                            <option>Featured</option>
+                            <option>A to Z</option>
+                            <option>Item</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var sanPham in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="~/assets/Images/@sanPham.AnhChinh" class="card-img-top img-fluid" alt="@sanPham.TenSanPham" style="height: 100%;" onclick="showProductDetail(@sanPham.ID_SanPham)">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">
+                                    @if (sanPham.TenSanPham.Length > 30)
+                                    {
+                                        @sanPham.TenSanPham.Substring(0, 30)
+                                    }
+                                    else
+                                    {
+                                        @sanPham.TenSanPham
+                                    }
+                                </h5>
+                                <p class="card-text text-danger">$<b>@sanPham.DonViGia.ToString("C")</b></p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <!-- Pagination Section -->
+                    <ul class="pagination pagination-lg justify-content-end">
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="@Url.Action("GiayTheoDM", new { MaDM = ViewBag.MaDM, page = i })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Content -->

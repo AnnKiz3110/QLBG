@@ -2,183 +2,201 @@
 Custom Css
 */
 .carousel-item.active {
-    background-color: #efefef; /* Thay màu này bằng màu chính của ảnh */
+    background-color: #efefef; /* Adjust color to match the main color of the image */
 }
-.navbar{
+
+.navbar {
     background-color: #ffffff;
-   
 }
+
 .navbar-sm-brand {
     text-align: center;
     color: #ffffff;
     font-size: 20px;
 }
+
 .navbar .navbar-brand {
-    background-color: #ffffff; /* Thay your-color-code bằng mã màu bạn muốn sử dụng */
+    background-color: #ffffff; /* Change to desired color code */
 }
 
-.flex-fill{
-margin-left: -10%;
-
+.flex-fill {
+    margin-left: -10%;
 }
-/* Hiển thị các mục con */
+
+/* Display sub-menu */
 .sub-menu {
     display: none;
     position: absolute;
-    background-color: #fff; /* Màu nền của mục con */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đổ */
-    z-index: 1; /* Đảm bảo mục con hiển thị trên các phần khác của trang */
-    width: 200px; /* Đặt chiều rộng của danh sách con */
+    background-color: #fff; /* Background color of sub-menu */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow effect */
+    z-index: 1; /* Ensure sub-menu displays above other elements */
+    width: 200px; /* Set width of sub-menu */
     padding: 10px;
 }
-.nav-item{
+
+.nav-item {
     margin-right: -40%;
 }
-/* Hiệu ứng hover */
+
+/* Hover effect */
 .nav-item:hover .sub-menu {
     display: block;
-    transform: scale(1.1); /* Tăng kích thước lên 110% */
+    transform: scale(1.1); /* Increase size by 110% */
+}
 
-}
 .navbar .nav-item .sub-menu {
-    margin-top: 10px; /* Thay đổi giá trị này để điều chỉnh khoảng cách */
+    margin-top: 10px; /* Adjust value to control spacing */
 }
-/* Thiết lập khoảng cách giữa các mục con */
+
+/* Set spacing between sub-menu items */
 .sub-menu li {
     padding: 15px;
 }
 
-/* Hiệu ứng hover cho các mục con */
+/* Hover effect for sub-menu items */
 .sub-menu li:hover {
-    background-color: #f0f0f0; /* Màu nền khi di chuột qua */
-    
+    background-color: #f0f0f0; /* Background color on hover */
 }
-/* Loại bỏ dấu mục cho danh sách con của các mục cha */
+
+/* Remove list style for sub-menu of parent items */
 .nav-item ul, .nav-item ol {
     list-style: none;
 }
 
-/* Thiết lập padding cho danh sách con (nếu cần) */
+/* Set padding for sub-menu (if needed) */
 .nav-item ul, .nav-item ol {
-    padding-left: 0; /* Loại bỏ khoảng cách bên trái */
+    padding-left: 0; /* Remove left padding */
 }
-/* Ban đầu, mục con có kích thước bằng 0% và bị ẩn đi */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-.container{
-  max-width: 1170px;
-  margin:auto;
+.container {
+    max-width: 1170px;
+    margin: auto;
 }
-.row{
-  display: flex;
-  flex-wrap: wrap;
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
 }
-ul{
-  list-style: none;
+
+ul {
+    list-style: none;
 }
-.footer{
-  background-color: #24262b;
+
+.footer {
+    background-color: #24262b;
     padding: 70px 0;
 }
-.footer-col{
-   width: 25%;
-   padding: 0 15px;
-}
-.footer-col h4{
-  font-size: 18px;
-  color: #ffffff;
-  text-transform: capitalize;
-  margin-bottom: 35px;
-  font-weight: 500;
-  position: relative;
-}
-.footer-col h4::before{
-  content: '';
-  position: absolute;
-  left:0;
-  bottom: -10px;
-  background-color: #e91e63;
-  height: 2px;
-  box-sizing: border-box;
-  width: 50px;
-}
-.footer-col ul li:not(:last-child){
-  margin-bottom: 10px;
-}
-.footer-col ul li a{
-  font-size: 16px;
-  text-transform: capitalize;
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 300;
-  color: #bbbbbb;
-  display: block;
-  transition: all 0.3s ease;
-}
-.footer-col ul li a:hover{
-  color: #ffffff;
-  padding-left: 8px;
-}
-.footer-col .social-links a{
-  display: inline-block;
-  height: 40px;
-  width: 40px;
-  background-color: rgba(255,255,255,0.2);
-  margin:0 10px 10px 0;
-  text-align: center;
-  line-height: 40px;
-  border-radius: 50%;
-  color: #ffffff;
-  transition: all 0.5s ease;
-}
-.footer-col .social-links a:hover{
-  color: #24262b;
-  background-color: #ffffff;
+
+.footer-col {
+    width: 25%;
+    padding: 0 15px;
 }
 
-/*responsive*/
-@media(max-width: 767px){
-  .footer-col{
-    width: 50%;
-    margin-bottom: 30px;
-}
-}
-@media(max-width: 574px){
-  .footer-col{
-    width: 100%;
-}
+.footer-col h4 {
+    font-size: 18px;
+    color: #ffffff;
+    text-transform: capitalize;
+    margin-bottom: 35px;
+    font-weight: 500;
+    position: relative;
 }
 
+.footer-col h4::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    background-color: #e91e63;
+    height: 2px;
+    box-sizing: border-box;
+    width: 50px;
+}
+
+.footer-col ul li:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    font-size: 16px;
+    text-transform: capitalize;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 300;
+    color: #bbbbbb;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+    color: #ffffff;
+    padding-left: 8px;
+}
+
+.footer-col .social-links a {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 10px 10px 0;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    color: #ffffff;
+    transition: all 0.5s ease;
+}
+
+.footer-col .social-links a:hover {
+    color: #24262b;
+    background-color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .footer-col {
+        width: 50%;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 574px) {
+    .footer-col {
+        width: 100%;
+    }
+}
 
 .card-img-top {
-    height: 200px; /* Đặt giá trị tùy thuộc vào yêu cầu của bạn */
-    object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng */
+    height: 200px; /* Adjust as needed */
+    object-fit: cover; /* Ensure image does not distort */
 }
 
 .card {
     transition: transform 0.3s, box-shadow 0.3s;
 }
+
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    cursor:pointer;
+    cursor: pointer;
 }
+
 #productCarousel {
     max-width: 100%;
     overflow: hidden;
     margin-top: 30px;
     margin-bottom: 30px;
-
 }
+
 #productCarousel .carousel-inner {
     text-align: center;
 }
 
 #productCarousel img {
-    max-height: 400px; /* Điều chỉnh chiều cao tối đa của ảnh */
+    max-height: 400px; /* Adjust max height */
     margin: auto;
 }
+
 th {
     white-space: nowrap; /* Prevent text wrapping */
     text-align: center; /* Center text */
@@ -202,41 +220,36 @@ td, th {
     color: #495057; /* Dark text color */
 }
 
-    .quantity-buttons a:hover {
-        background-color: #e9ecef; /* Lighter gray background on hover */
-    }
+.quantity-buttons a:hover {
+    background-color: #e9ecef; /* Lighter gray background on hover */
+}
 
 /* Style for the total row */
 .total-row {
     background-color: #f2f3f4; /* Lighter gray background for total row */
 }
 
-
-/* Trang Shop */
+/* Shop Page */
 .custom-card {
-    background-color: #f8f9fa; /* Màu nền */
+    background-color: #f8f9fa; /* Background color */
     padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
-    
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
 }
 
-.custom-card h5 
-{
-        color: #007bff; /* Màu tiêu đề */
-    }
+.custom-card h5 {
+    color: #007bff; /* Title color */
+}
 
-
-/* Information User*/
+/* Information User */
 .gradient-custom {
-     fallback for old browsers 
+    /* Fallback for old browsers */
     background: #f6d365;
-     Chrome 10-25, Safari 5.1-6 
+    /* Chrome 10-25, Safari 5.1-6 */
     background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
-     W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ 
-    background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
 }
-
 
 button {
     max-width: 320px;
@@ -255,13 +268,39 @@ button {
     color: rgb(65, 63, 63);
     background-color: #fff;
     cursor: pointer;
-    transition: all .6s ease;
+    transition: all 0.6s ease;
 }
 
-.button svg {
+button svg {
     height: 24px;
 }
 
 button:hover {
     transform: scale(1.02);
+}
+
+/* Additional Styles for Alignment and Layout in Shop */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-body img {
+    flex-shrink: 0;
+    max-height: 200px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.card-body h5 {
+    flex-grow: 1;
+}
+
+.card-body p {
+    flex-grow: 1;
+}
+
+.card-body form {
+    margin-top: auto;
 }

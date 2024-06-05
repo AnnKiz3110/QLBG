@@ -1,0 +1,29 @@
+﻿@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "ShowTotalSoldProductsByCategory";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+
+
+<h2>Danh mục có số lượng sản phẩm bán được lớn hơn 10</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Tên danh mục</th>
+            <th>Tổng số lượng sản phẩm đã bán</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRow row in Model.Rows)
+        {
+            <tr>
+                <td>@row["TenDanhMuc"]</td>
+                <td>@row["TongSoLuongBan"]</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -12,8 +12,7 @@
             <div class="card">
                 <div class="card-body">
                     <!-- Nội dung của danh mục -->
-                                     @Html.Action("DanhMucPar", "DanhMuc")
-                    
+                    @Html.Action("DanhMucPar", "DanhMuc")
                 </div>
             </div>
         </div>
@@ -45,23 +44,37 @@
                         </form>
                     </div>
                 </div>
-
             </div>
+
             <div class="row">
                 @foreach (var sanPham in Model)
                 {
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <img src="~/assets/Images/@sanPham.AnhChinh" class="img-fluid" alt="@sanPham.TenSanPham" style="width:100%;height:auto;">
-                                <h3>@sanPham.TenSanPham</h3>
-                                <p>@sanPham.Mota</p>
-                                <p>Giá: @sanPham.DonViGia.ToString("C")</p>
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center d-flex flex-column justify-content-between">
+                                <!-- Product Image -->
+                                <img src="~/assets/Images/@sanPham.AnhChinh" class="img-fluid mb-3" alt="@sanPham.TenSanPham" style="max-height: 200px; object-fit: cover;">
+                                <!-- Product Title -->
+                                <h5 class="card-title">@sanPham.TenSanPham</h5>
+                                <!-- Product Description -->
+                                <p class="card-text">@sanPham.Mota</p>
+                                <!-- Product Price -->
+                                <p class="text-primary font-weight-bold">Giá: @sanPham.DonViGia.ToString("C")</p>
+                                <!-- Add to Cart Form -->
+                                <form action="@Url.Action("ThemGioHang", "GioHang")" method="post">
+                                    <input type="hidden" name="ms" value="@sanPham.ID_SanPham" />
+                                    <input type="hidden" name="strURL" value="@Url.Action("Shop")" />
+                                    <div class="input-group mb-3 justify-content-center">
+                                        <input type="number" name="quantity" value="1" min="1" class="form-control text-center" style="max-width: 80px;" />
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 }
             </div>
+
 
             <div class="row">
                 <div class="col-12 text-center">
@@ -105,7 +118,6 @@
                         <div class="carousel slide carousel-multi-item pt-2 pt-md-0" id="multi-item-example" data-bs-ride="carousel">
                             <!--Slides-->
                             <div class="carousel-inner product-links-wap" role="listbox">
-
                                 <!--First slide-->
                                 <div class="carousel-item active">
                                     <div class="row">
@@ -160,7 +172,6 @@
                                     </div>
                                 </div>
                                 <!--End Third slide-->
-
                             </div>
                             <!--End Slides-->
                         </div>

@@ -171,13 +171,18 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DangNhapController.cs" />
     <Compile Include="Controllers\DanhMucController.cs" />
+    <Compile Include="Controllers\GiayController.cs" />
+    <Compile Include="Controllers\GioHangController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\CTDatHang.cs" />
+    <Compile Include="Models\CTDatHangViewModel.cs" />
     <Compile Include="Models\DanhMuc.cs" />
+    <Compile Include="Models\DatHang.cs" />
+    <Compile Include="Models\GioHang.cs" />
     <Compile Include="Models\HinhAnh.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\OracleDbManager.cs" />
@@ -401,6 +406,14 @@
     <Content Include="Views\AccountOracle\ManagePrivileges.cshtml" />
     <Content Include="Views\AccountOracle\ViewPrivileges.cshtml" />
     <Content Include="Views\DanhMuc\DanhMucPar.cshtml" />
+    <Content Include="Views\Giay\Timgiay.cshtml" />
+    <Content Include="Views\Giay\GiayTheoDM.cshtml" />
+    <Content Include="Views\Admin\ShowTotalPurchase.cshtml" />
+    <Content Include="Views\Admin\ShowTotalSoldProductsByCategory.cshtml" />
+    <Content Include="Views\GioHang\DatHang.cshtml" />
+    <Content Include="Views\GioHang\GioHang.cshtml" />
+    <Content Include="Views\GioHang\GioHangPar.cshtml" />
+    <Content Include="Views\Admin\ShowDatHang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using QLBG.Models;
 
 public class OracleDbManager
@@ -152,6 +153,50 @@ public class OracleDbManager
             }
         }
     }
+
+    public SanPham GetSanPham(int masanpham)
+    {
+        SanPham sanPham = null;
+        using (OracleConnection conn = new OracleConnection(connectionString))
+        {
+            conn.Open();
+            using (OracleCommand cmd = new OracleCommand(@"
+                SELECT sp.ID_SanPham, sp.TenSanPham, sp.ID_ThuongHieu, sp.ID_DanhMuc,
+                       sp.ID_Anh, sp.ID_KichThuoc, sp.ID_Mau, sp.Mota, sp.DonViGia, sp.SoLuongTon,
+                       ha.AnhChinh, ha.Anh1, ha.Anh2
+                FROM SANPHAM sp
+                JOIN HINHANH ha ON sp.ID_Anh = ha.ID_Anh
+                WHERE sp.ID_SanPham = :ID_SanPham", conn))
+            {
+                cmd.Parameters.Add(new OracleParameter("ID_SanPham", masanpham));
+
+                using (OracleDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        sanPham = new SanPham
+                        {
+                            ID_SanPham = reader.GetInt32(reader.GetOrdinal("ID_SanPham")),
+                            TenSanPham = reader.GetString(reader.GetOrdinal("TenSanPham")),
+                            ID_ThuongHieu = reader.GetInt32(reader.GetOrdinal("ID_ThuongHieu")),
+                            ID_DanhMuc = reader.GetInt32(reader.GetOrdinal("ID_DanhMuc")),
+                            ID_Anh = reader.GetInt32(reader.GetOrdinal("ID_Anh")),
+                            ID_KichThuoc = reader.GetInt32(reader.GetOrdinal("ID_KichThuoc")),
+                            ID_Mau = reader.GetInt32(reader.GetOrdinal("ID_Mau")),
+                            Mota = reader.GetString(reader.GetOrdinal("Mota")),
+                            DonViGia = reader.GetDecimal(reader.GetOrdinal("DonViGia")),
+                            SoLuongTon = reader.GetInt32(reader.GetOrdinal("SoLuongTon")),
+                            AnhChinh = reader.GetString(reader.GetOrdinal("AnhChinh")),
+                            Anh1 = reader.GetString(reader.GetOrdinal("Anh1")),
+                            Anh2 = reader.GetString(reader.GetOrdinal("Anh2"))
+                        };
+                    }
+                }
+            }
+        }
+        return sanPham;
+    }
+
 
     public List<SanPham> GetSanPhams()
     {
@@ -325,6 +370,58 @@ public class OracleDbManager
         }
 
     }
+
+    public DataTable ShowTotalPurchase()
+    {
+        string query = @"
+        SELECT 
+            U.HoTen AS TenKhachHang, 
+            SUM(CT.SoLuong * CT.DonViGia) AS TONGTIENMUAHANG
+        FROM 
+            USERS U
+        JOIN 
+            DATHANG DH ON U.ID_KhachHang = DH.ID_KhachHang
+        JOIN 
+            CT_DATHANG CT ON DH.ID_DatHang = CT.ID_DatHang
+        WHERE 
+            DH.NgayDat >= TO_DATE('2023-01-01', 'YYYY-MM-DD')
+        GROUP BY 
+            U.HoTen
+        HAVING 
+            SUM(CT.SoLuong * CT.DonViGia) > 500
+        ORDER BY 
+            TONGTIENMUAHANG DESC";
+
+        return ExecuteQuery(query);
+    }
+
+    public DataTable ShowTotalSoldProductsByCategory()
+    {
+        string query = @"
+        SELECT 
+            DM.TenDanhMuc, 
+            SUM(CT.SoLuong) AS TongSoLuongBan
+        FROM 
+            SANPHAM SP
+        JOIN 
+            DANHMUC DM ON SP.ID_DanhMuc = DM.ID_DanhMuc
+        JOIN 
+            CT_DATHANG CT ON SP.ID_SanPham = CT.ID_SanPham
+        JOIN 
+            DATHANG DH ON CT.ID_DatHang = DH.ID_DatHang
+        WHERE 
+            DH.NgayDat >= TO_DATE('2023-01-01', 'YYYY-MM-DD')
+        GROUP BY 
+            DM.TenDanhMuc
+        HAVING 
+            SUM(CT.SoLuong) > 10
+        ORDER BY 
+            TongSoLuongBan DESC";
+
+        return ExecuteQuery(query);
+    }
+
+
 
     public List<User> GetAllUsers()
     {
@@ -691,6 +788,246 @@ public class OracleDbManager
     }
 
 
+    public int AddDatHang(int khachHangId, double tongThanhTien)
+    {
+        int idDatHang;
+        using (OracleConnection conn = new OracleConnection(connectionString))
+        {
+            conn.Open();
+            using (OracleCommand cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    INSERT INTO DATHANG (ID_DATHANG, ID_KhachHang, NgayDat, SoLuong)
+                    VALUES (SEQ_DATHANG.NEXTVAL, :ID_KhachHang, SYSDATE, :SoLuong)
+                    RETURNING ID_DATHANG INTO :ID_DatHang";
+                cmd.Parameters.Add(new OracleParameter("ID_KhachHang", khachHangId));
+                cmd.Parameters.Add(new OracleParameter("SoLuong", tongThanhTien));
+                OracleParameter returnParam = new OracleParameter("ID_DatHang", OracleDbType.Int32, ParameterDirection.Output);
+                cmd.Parameters.Add(returnParam);
+
+                cmd.ExecuteNonQuery();
+
+                idDatHang = ((OracleDecimal)returnParam.Value).ToInt32();
+            }
+        }
+        return idDatHang;
+    }
+
+    public void AddChiTietDatHang(int idDatHang, int idSanPham, int soLuong, double donViGia)
+    {
+        using (OracleConnection conn = new OracleConnection(connectionString))
+        {
+            conn.Open();
+            using (OracleCommand cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    INSERT INTO CT_DATHANG (ID_CTDatHang, ID_DatHang, ID_SanPham, SoLuong, DonViGia)
+                    VALUES (SEQ_CT_DATHANG.NEXTVAL, :ID_DatHang, :ID_SanPham, :SoLuong, :DonViGia)";
+                cmd.Parameters.Add(new OracleParameter("ID_DatHang", idDatHang));
+                cmd.Parameters.Add(new OracleParameter("ID_SanPham", idSanPham));
+                cmd.Parameters.Add(new OracleParameter("SoLuong", soLuong));
+                cmd.Parameters.Add(new OracleParameter("DonViGia", donViGia));
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+
+
+    public List<GioHang> GetGioHang(string sessionId)
+    {
+        // Fetch the cart items from your temporary storage based on sessionId
+        // For simplicity, here we are just simulating the cart retrieval
+        // You need to implement actual logic to fetch data from your session-based storage or a temporary table
+        return (List<GioHang>)HttpContext.Current.Session[sessionId] ?? new List<GioHang>();
+    }
+
+    public GioHang GetSanPhamInGioHang(string sessionId, int idSanPham)
+    {
+        var gioHang = GetGioHang(sessionId);
+        return gioHang.FirstOrDefault(sp => sp.ID_SanPham == idSanPham);
+    }
+
+    public void AddSanPhamToGioHang(string sessionId, int idSanPham, int soLuong)
+    {
+        var gioHang = GetGioHang(sessionId);
+        var sanPham = new GioHang(idSanPham)
+        {
+            SoLuong = soLuong
+        };
+        gioHang.Add(sanPham);
+        HttpContext.Current.Session[sessionId] = gioHang;
+    }
+
+    public void UpdateSoLuongSanPham(string sessionId, int idSanPham, int soLuong)
+    {
+        var gioHang = GetGioHang(sessionId);
+        var sanPham = gioHang.FirstOrDefault(sp => sp.ID_SanPham == idSanPham);
+        if (sanPham != null)
+        {
+            sanPham.SoLuong = soLuong;
+        }
+        HttpContext.Current.Session[sessionId] = gioHang;
+    }
+
+    public void RemoveSanPhamFromGioHang(string sessionId, int idSanPham)
+    {
+        var gioHang = GetGioHang(sessionId);
+        var sanPham = gioHang.FirstOrDefault(sp => sp.ID_SanPham == idSanPham);
+        if (sanPham != null)
+        {
+            gioHang.Remove(sanPham);
+        }
+        HttpContext.Current.Session[sessionId] = gioHang;
+    }
+
+    public int GetTongSoLuong(string sessionId)
+    {
+        var gioHang = GetGioHang(sessionId);
+        return gioHang.Sum(sp => sp.SoLuong);
+    }
+
+    public double GetThanhTien(string sessionId)
+    {
+        var gioHang = GetGioHang(sessionId);
+        return gioHang.Sum(sp => sp.ThanhTien);
+    }
+
+    public void ClearGioHang(string sessionId)
+    {
+        HttpContext.Current.Session[sessionId] = new List<GioHang>();
+    }
+
+    public List<DatHang> GetAllDatHangs()
+    {
+        List<DatHang> listDatHang = new List<DatHang>();
+        using (OracleConnection conn = new OracleConnection(connectionString))
+        {
+            string query = @"SELECT a.ID_DatHang, a.ID_KhachHang, a.NgayDat, 
+                                b.ID_CTDatHang, b.ID_SanPham, b.SoLuong, b.DonViGia 
+                         FROM DATHANG a 
+                         JOIN CT_DATHANG b ON a.ID_DatHang = b.ID_DatHang";
+
+            using (OracleCommand cmd = new OracleCommand(query, conn))
+            {
+                conn.Open();
+                using (OracleDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int idDatHang = Convert.ToInt32(reader["ID_DatHang"]);
+                        var datHang = listDatHang.FirstOrDefault(d => d.ID_DatHang == idDatHang);
+                        if (datHang == null)
+                        {
+                            datHang = new DatHang
+                            {
+                                ID_DatHang = idDatHang,
+                                ID_KhachHang = Convert.ToInt32(reader["ID_KhachHang"]),
+                                NgayDat = Convert.ToDateTime(reader["NgayDat"]),
+                                CTDatHangs = new List<CTDatHang>()
+                            };
+                            listDatHang.Add(datHang);
+                        }
+
+                        datHang.CTDatHangs.Add(new CTDatHang
+                        {
+                            ID_CTDatHang = Convert.ToInt32(reader["ID_CTDatHang"]),
+                            ID_DatHang = idDatHang,
+                            ID_SanPham = Convert.ToInt32(reader["ID_SanPham"]),
+                            SoLuong = Convert.ToInt32(reader["SoLuong"]),
+                            DonViGia = Convert.ToDecimal(reader["DonViGia"])
+                        });
+                    }
+                }
+            }
+        }
+        return listDatHang;
+    }
+
+
+    public DatHang GetDatHangById(int id)
+    {
+        DatHang datHang = null;
+        using (OracleConnection conn = new OracleConnection(connectionString))
+        {
+            string query = @"SELECT a.ID_DatHang, a.ID_KhachHang, a.NgayDat, 
+                                b.ID_CTDatHang, b.ID_SanPham, b.SoLuong, b.DonViGia 
+                         FROM DATHANG a 
+                         JOIN CT_DATHANG b ON a.ID_DatHang = b.ID_DatHang
+                         WHERE a.ID_DatHang = :ID_DatHang";
+
+            using (OracleCommand cmd = new OracleCommand(query, conn))
+            {
+                cmd.Parameters.Add(new OracleParameter("ID_DatHang", id));
+                conn.Open();
+                using (OracleDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (datHang == null)
+                        {
+                            datHang = new DatHang
+                            {
+                                ID_DatHang = Convert.ToInt32(reader["ID_DatHang"]),
+                                ID_KhachHang = Convert.ToInt32(reader["ID_KhachHang"]),
+                                NgayDat = Convert.ToDateTime(reader["NgayDat"]),
+                                CTDatHangs = new List<CTDatHang>()
+                            };
+                        }
+
+                        datHang.CTDatHangs.Add(new CTDatHang
+                        {
+                            ID_CTDatHang = Convert.ToInt32(reader["ID_CTDatHang"]),
+                            ID_DatHang = Convert.ToInt32(reader["ID_DatHang"]),
+                            ID_SanPham = Convert.ToInt32(reader["ID_SanPham"]),
+                            SoLuong = Convert.ToInt32(reader["SoLuong"]),
+                            DonViGia = Convert.ToDecimal(reader["DonViGia"])
+                        });
+                    }
+                }
+            }
+        }
+        return datHang;
+    }
+
+    public bool DeleteDatHang(int id)
+    {
+        using (OracleConnection conn = new OracleConnection(connectionString))
+        {
+            conn.Open();
+
+            using (OracleTransaction transaction = conn.BeginTransaction())
+            {
+                try
+                {
+                    // Delete details
+                    string deleteCTQuery = "DELETE FROM CT_DATHANG WHERE ID_DatHang = :ID_DatHang";
+                    using (OracleCommand deleteCTCmd = new OracleCommand(deleteCTQuery, conn))
+                    {
+                        deleteCTCmd.Parameters.Add(new OracleParameter("ID_DatHang", id));
+                        deleteCTCmd.ExecuteNonQuery();
+                    }
+
+                    // Delete order
+                    string deleteQuery = "DELETE FROM DATHANG WHERE ID_DatHang = :ID_DatHang";
+                    using (OracleCommand deleteCmd = new OracleCommand(deleteQuery, conn))
+                    {
+                        deleteCmd.Parameters.Add(new OracleParameter("ID_DatHang", id));
+                        deleteCmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+    }
 
 }
 
