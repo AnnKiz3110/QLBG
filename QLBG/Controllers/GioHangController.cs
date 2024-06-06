@@ -132,5 +132,54 @@ namespace QLBG.Controllers
             // Assume this method fetches the currently logged-in user's ID
             return (int)Session["UserId"];
         }
+
+        // Gọi hàm Thêm Đơn Hàng từ OracleDbManager
+        public ActionResult ThemDonHang(int idKhachHang, DateTime ngayDat, int soLuong)
+        {
+            try
+            {
+                dbManager.ThemDonHang(idKhachHang, ngayDat, soLuong);
+                ViewBag.Message = "Đã thêm đơn hàng thành công!";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Lỗi khi thêm đơn hàng: " + ex.Message;
+            }
+
+            return View("Result");
+        }
+
+        // Gọi hàm Hiển Thị Đơn Hàng từ OracleDbManager
+        public ActionResult HienThiDonHang()
+        {
+            try
+            {
+                dbManager.HienThiDonHang();
+                ViewBag.Message = "Đã hiển thị đơn hàng thành công!";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Lỗi khi hiển thị đơn hàng: " + ex.Message;
+            }
+
+            return View("Result");
+        }
+
+        // Gọi hàm Tính Tổng Số Lượng Sản Phẩm Theo Thương Hiệu từ OracleDbManager
+        public ActionResult TinhTongSoLuongSanPhamTheoThuongHieu(int thuong_hieu_id)
+        {
+            try
+            {
+                int tongSoLuong = dbManager.TinhTongSoLuongSanPhamTheoThuongHieu(thuong_hieu_id);
+                ViewBag.Message = "Tổng số lượng sản phẩm theo thương hiệu là: " + tongSoLuong;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Lỗi khi tính tổng số lượng sản phẩm: " + ex.Message;
+            }
+
+            return View("Result");
+        }
     }
 }
+

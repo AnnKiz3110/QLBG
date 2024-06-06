@@ -33,19 +33,36 @@ namespace QLBG.Controllers
         {
             if (dbManager.DanhMucExists(danhMuc.ID_DanhMuc))
             {
-                ViewBag.TB = "Trùng ID!";
-                return View();
+                ModelState.AddModelError("", "Trùng ID!");
+                return View(danhMuc);
             }
 
             if (ModelState.IsValid)
             {
-                dbManager.InsertDanhMuc(danhMuc);
-                ViewBag.TB = null;
-                return RedirectToAction("ShowDanhMuc");
+                try
+                {
+                    dbManager.InsertDanhMuc(danhMuc);
+                    return RedirectToAction("ShowDanhMuc");
+                }
+                catch (Exception ex)
+                {
+                    // Kiểm tra nếu lỗi từ cơ sở dữ liệu Oracle chứa chuỗi "TenDanhMuc không được để trống"
+                    if (ex.Message.Contains("TenDanhMuc không được để trống"))
+                    {
+                        ModelState.AddModelError("", "Tên danh mục không được để trống.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Lỗi khi thêm danh mục.");
+                    }
+                    return View(danhMuc);
+                }
             }
 
             return View(danhMuc);
         }
+
+
 
         public ActionResult EditDM(int? id)
         {

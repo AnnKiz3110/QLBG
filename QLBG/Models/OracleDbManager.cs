@@ -309,14 +309,30 @@ public class OracleDbManager
         using (OracleConnection conn = new OracleConnection(connectionString))
         {
             conn.Open();
-            string query = "INSERT INTO DANHMUC (ID_DanhMuc, TenDanhMuc) VALUES (:id, :ten)";
-            OracleCommand cmd = new OracleCommand(query, conn);
-            cmd.Parameters.Add(new OracleParameter("id", danhMuc.ID_DanhMuc));
-            cmd.Parameters.Add(new OracleParameter("ten", danhMuc.TenDanhMuc));
+            OracleCommand cmd = new OracleCommand("ThemDanhMuc", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            cmd.ExecuteNonQuery();
+            // Thêm tham số cho procedure
+            cmd.Parameters.Add("p_ID_DanhMuc", OracleDbType.Int32).Direction = ParameterDirection.Input;
+            cmd.Parameters["p_ID_DanhMuc"].Value = danhMuc.ID_DanhMuc;
+
+            cmd.Parameters.Add("p_TenDanhMuc", OracleDbType.NVarchar2).Direction = ParameterDirection.Input;
+            cmd.Parameters["p_TenDanhMuc"].Value = danhMuc.TenDanhMuc;
+
+            try
+            {
+                // Thực thi procedure
+                cmd.ExecuteNonQuery();
+            }
+            catch (OracleException ex)
+            {
+                // Xử lý ngoại lệ
+                // ex.Message chứa thông điệp lỗi từ Oracle
+                throw new Exception("Lỗi khi thêm danh mục: " + ex.Message);
+            }
         }
     }
+
 
     public bool UpdateDanhMuc(DanhMuc danhMuc)
     {
@@ -1027,6 +1043,56 @@ public class OracleDbManager
                 }
             }
         }
+    }
+
+    // Thêm đơn hàng
+    public void ThemDonHang(int idKhachHang, DateTime ngayDat, int soLuong)
+    {
+        using (OracleConnection connection = new OracleConnection(connectionString))
+        {
+            connection.Open();
+            using (OracleCommand command = new OracleCommand("ThemDonHang", connection))
+            {
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.Add("p_ID_KhachHang", OracleDbType.Int32).Value = idKhachHang;
+                command.Parameters.Add("p_NgayDat", OracleDbType.Date).Value = ngayDat;
+                command.Parameters.Add("p_SoLuong", OracleDbType.Int32).Value = soLuong;
+                command.ExecuteNonQuery();
+            }
+        }
+    }
+
+    // Hiển thị đơn hàng
+    public void HienThiDonHang()
+    {
+        using (OracleConnection connection = new OracleConnection(connectionString))
+        {
+            connection.Open();
+            using (OracleCommand command = new OracleCommand("HienThiDonHang", connection))
+            {
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.ExecuteNonQuery();
+            }
+        }   
+    }
+
+    // Tính tổng số lượng sản phẩm theo thương hiệu
+    public int TinhTongSoLuongSanPhamTheoThuongHieu(int thuong_hieu_id)
+    {
+        int tongSoLuong = 0;
+        using (OracleConnection connection = new OracleConnection(connectionString))
+        {
+            connection.Open();
+            using (OracleCommand command = new OracleCommand("TINH_TONG_SO_LUONG_SAN_PHAM_THEO_THUONG_HIEU", connection))
+            {
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.Add("thuong_hieu_id", OracleDbType.Int32).Value = thuong_hieu_id;
+                command.Parameters.Add("tong_so_luong", OracleDbType.Int32).Direction = System.Data.ParameterDirection.ReturnValue;
+                command.ExecuteNonQuery();
+                tongSoLuong = Convert.ToInt32(command.Parameters["tong_so_luong"].Value);
+            }
+        }
+        return tongSoLuong;
     }
 
 }
